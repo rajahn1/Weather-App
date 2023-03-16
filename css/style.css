@@ -1,15 +1,18 @@
+@import url('colors.css');
+
 main {
     display: flex;
     align-items: center;
-    align-self: center;
     justify-content: center;
     flex-direction: column;
     width: 50vw;
-    height: 50vh;
+    height: 100vh;
     padding: 10px;
+    background-color: rgb(0, 119, 167);
 }
 
 main h1 {
+    color: var(--text-color);
     margin: 10px;
     margin-bottom: 20px;
 }
@@ -19,7 +22,7 @@ main h1 {
     align-items: center;
     justify-content: center;
     padding: 10px;
-    border: solid grey 1px;
+    width: 30%;
 }
 
 .container-location span{
@@ -28,4 +31,33 @@ main h1 {
     font-family: sans-serif;
     padding: 0 10px;
     margin-left: 8px;
+}
+
+.container-location input {
+    font-size: 22px;
+    width: 100%;
+    height: 80%;
+    margin-left: 10px;
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+}
+.container-location img {
+    width: 50px;
+}
+
+.container-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-condition {
+    font-size: 22px;
+    color: var(--text-color);
+}
+.temperature {
+    font-size: 100px;
+    color: white;
+
 }
