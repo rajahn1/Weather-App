@@ -2,6 +2,19 @@ const apiKey = '09201f10b59146afa34173458231503';
 const inputLocation = document.querySelector('input');
 const divTime = document.querySelector('.container-time');
 const divTemperature = document.querySelector('.container-temperature');
+const imgTimeIcon = document.querySelector('.time-img');
+const spanTimeDescription = document.querySelector('.time-condition');
+const locationIcon = document.querySelector('.icon-location');
+const cityName = document.querySelector('.city');
+const data = document.querySelector('.data');
+const windSpan = document.querySelector('.wind span');
+const humiditySpan = document.querySelector('.humidity span');
+const rainSpan = document.querySelector('.rain span');
+
+
+locationIcon.addEventListener('click', (event) => {
+    inputLocation.style.display = 'flex';
+})
 
 inputLocation.addEventListener('blur', (event) => {
     inputLocation.style.border = 'unset';
@@ -20,8 +33,9 @@ inputLocation.addEventListener('keypress', (event) => {
         inputLocation.value += event.key;
         return;
     }
-    
 
+    inputLocation.style.display = 'none';
+    cityName.innerHTML = inputLocation.value;
     const city = inputLocation.value;
 
     fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json =>{
@@ -30,32 +44,33 @@ inputLocation.addEventListener('keypress', (event) => {
     const temperatureCelsius = json.current.temp_c;
     const temperraturerFahrenheit = json.current.temp_f;
     const windSpeed = json.current.wind_kph;
-    console.log(json);
-    console.log(temperatureCelsius)
+    let cityData = json.location.localtime;
 
-    const imgTimeIcon = document.createElement('img');
+    cityData = new Date(cityData).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+      });
+
     imgTimeIcon.src = timeIcon;
-    divTime.appendChild(imgTimeIcon);
-
-    const spanTimeDescription = document.createElement('span');
     spanTimeDescription.innerHTML = timeCondition;
-    spanTimeDescription.classList.add('time-condition');
-    divTime.appendChild(spanTimeDescription);
-
     divTemperature.innerHTML = `${temperatureCelsius}°`;
+    data.innerHTML = cityData;
+    windSpan.innerHTML = `${windSpeed} km/h`;
 
-    // const spanTemperatureCelsius = document.createElement('span');
-    // spanTemperatureCelsius.innerHTML = 
-    // spanTemperatureCelsius.classList.add('temperature')
-    // divTime.appendChild(spanTemperatureCelsius);
-
-    
-
-
-
+    inputLocation.value = '';
+    console.log(json);
+})
 })
 
+let city = 'london';
 
+fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json => {
+
+    const specificDay = json.forecast.forecastday[0].day;
+    const maxTemp = parseInt(specificDay.maxtemp_c);
+    const minTemp = parseInt(specificDay.mintemp_c);
 
 })
 

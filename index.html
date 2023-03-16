@@ -8,25 +8,49 @@
     <link rel="stylesheet" href="./css/colors.css">
     <link rel="stylesheet" href="./css/global.css">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
 </head>
 <body>
     <main>
-        <h1>Weather App</h1>
         <div class="container-location"> 
-            <img src="./assets/icon-location-white.png" alt="location">
+            <img class="icon-location" src="./assets/icon-location-white.png" alt="location">
             <input type="text" placeholder="digite sua cidade..">
         </div>
+        <h1 class="city"> Lalaland</h1>
         <div class="container-time">
-
+            <img class="time-img" src="./assets/not-found-icon.png" alt="">
         </div>
         <div class="container-temperature temperature">
-
-
+            404°
+        </div>
+        <span class="time-condition">
+            Fecho o tempo!
+        </span>
+        <span class="data">
+            April 15, 1452
+        </span>
+        <div class="condition-variables">
+            <div class="wind">
+                <img src="./assets/wind-icon.png" alt="wind-icon">
+                <span></span>
+                <p> wind</p>
+            </div>
+       
+            <div class="humidity">
+                <img src="./assets/humidity-icon.png" alt="humidity-icon">
+                <span></span>
+                <p> humidity </p>
+            </div>
+            <div class="rain">
+                <img src="./assets/rain-icon.png" alt="rain-icon">
+                <span></span>
+                <p> rain </p>
+            </div>
         </div>
 
     </main>
-    
-
 
     <script src="./js/script.js"></script>
 </body>
