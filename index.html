@@ -10,27 +10,37 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <div class="main-container">
     <main>
         <div class="container-location"> 
             <img class="icon-location" src="./assets/icon-location-white.png" alt="location">
             <input type="text" placeholder="digite sua cidade..">
         </div>
-        <h1 class="city"> Lalaland</h1>
+        <div class="city">
+            <h1></h1>
+        </div>
         <div class="container-time">
             <img class="time-img" src="./assets/not-found-icon.png" alt="">
         </div>
         <div class="container-temperature temperature">
-            404°
+            <span>404°</span>
+            
         </div>
-        <span class="time-condition">
-            Fecho o tempo!
-        </span>
+        <div>
+            <span class="time-condition">
+                Fecho o tempo!
+            </span>
+        </div>
+       <div class="container-data">
         <span class="data">
             April 15, 1452
         </span>
+       </div>
+      
         <div class="condition-variables">
             <div class="wind">
                 <img src="./assets/wind-icon.png" alt="wind-icon">
@@ -51,6 +61,30 @@
         </div>
 
     </main>
+    <div class= "forecast-container" >
+        <div class="forecast-card">
+            <span class="forecast-temp"></span>
+            <img class="forecast-img" src="" alt="">
+            <span class="forecast-hour"></span>
+         </div>
+        <div class="forecast-card"> 
+            <span class="forecast-temp"></span>
+            <img class="forecast-img" src="" alt="">
+            <span class="forecast-hour"></span>
+        </div>
+        <div class="forecast-card">
+            <span class="forecast-temp"></span>
+            <img class="forecast-img" src="" alt="">
+            <span class="forecast-hour"></span>
+        </div>
+        <div class="forecast-card"> 
+            <span class="forecast-temp"></span>
+            <img class="forecast-img" src="" alt="">
+            <span class="forecast-hour"></span>
+        </div>
+    </div>
+</div>
+   
 
     <script src="./js/script.js"></script>
 </body>

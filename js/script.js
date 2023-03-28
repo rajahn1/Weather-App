@@ -12,8 +12,18 @@ const humiditySpan = document.querySelector('.humidity span');
 const rainSpan = document.querySelector('.rain span');
 
 
+const forecastContainer = document.querySelector('.forecast-container');
+const forecastTemp = document.querySelectorAll('.forecast-temp');
+const forecastImg = document.querySelectorAll('.forecast-img');
+const forecastHour = document.querySelectorAll('.forecast-hour');
+
+forecastContainer.style.display = 'none';
+
+cityName.innerHTML = 'Lalaland';
+
 locationIcon.addEventListener('click', (event) => {
     inputLocation.style.display = 'flex';
+    inputLocation.value = '';
 })
 
 inputLocation.addEventListener('blur', (event) => {
@@ -35,16 +45,30 @@ inputLocation.addEventListener('keypress', (event) => {
     }
 
     inputLocation.style.display = 'none';
-    cityName.innerHTML = inputLocation.value;
     const city = inputLocation.value;
 
-    fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json =>{
+    fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json => {
+
+    if (json.error) {
+        alert(json.error.message);
+        imgTimeIcon.src = './assets/not-found-icon.png';
+        spanTimeDescription.innerHTML = 'Fecho o tempo!';
+        divTemperature.innerHTML = '404°';
+        data.innerHTML = 'April 15, 1452';
+        windSpan.innerHTML = '';
+        humiditySpan.innerHTML = '';
+        rainSpan.innerHTML = '';
+        return;
+    }
     const timeCondition = json.current.condition.text;
     const timeIcon = json.current.condition.icon;
-    const temperatureCelsius = json.current.temp_c;
+    const temperatureCelsius = parseInt(json.current.temp_c);
     const temperraturerFahrenheit = json.current.temp_f;
     const windSpeed = json.current.wind_kph;
+    const humidity = json.current.humidity;
+    const precip = json.current.precip_mm;
     let cityData = json.location.localtime;
+    console.log(json);
 
     cityData = new Date(cityData).toLocaleDateString("en-US", {
         year: "numeric",
@@ -52,25 +76,47 @@ inputLocation.addEventListener('keypress', (event) => {
         day: "numeric",
         timeZone: "UTC",
       });
-
+    
+    cityName.innerHTML = json.location.name;
     imgTimeIcon.src = timeIcon;
     spanTimeDescription.innerHTML = timeCondition;
-    divTemperature.innerHTML = `${temperatureCelsius}°`;
+    divTemperature.innerHTML = `${temperatureCelsius}°C`;
     data.innerHTML = cityData;
     windSpan.innerHTML = `${windSpeed} km/h`;
+    humiditySpan.innerHTML = `${humidity} %`;
 
     inputLocation.value = '';
-    console.log(json);
+    
 })
-})
-
-let city = 'london';
 
 fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json => {
 
-    const specificDay = json.forecast.forecastday[0].day;
-    const maxTemp = parseInt(specificDay.maxtemp_c);
-    const minTemp = parseInt(specificDay.mintemp_c);
+    const rainChance = json.forecast.forecastday[0].day.daily_chance_of_rain;
+    rainSpan.innerHTML = `${rainChance}%`;
 
+    const specificDay = json.forecast.forecastday[0].day;
+    
+    const specificHour = json.forecast.forecastday[0].hour;
+    const hour = json.location.localtime;
+    const actualHour = new Date(hour).toLocaleTimeString([],{hour: "2-digit"})
+    let firstHour;
+
+    console.log(json);
+
+    for (let index = 0; index < specificHour.length; index++) {
+        let specificHourFormated = new Date(specificHour[index].time).toLocaleTimeString([],{hour: "2-digit"});
+        if (specificHourFormated === actualHour) {
+            for(let i=0; i < forecastHour.length; i++) {
+                forecastHour[i].innerHTML = `${specificHourFormated}:00`;
+                forecastTemp[i].innerHTML = `${specificDay.avgtemp_c} °`;
+                forecastImg[i].src = specificDay.condition.icon;
+            }
+        }
+        }
+        forecastContainer.style.display = 'flex';
 })
+})
+
+
+
 

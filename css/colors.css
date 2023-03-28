@@ -1,5 +1,5 @@
 :root {
     --text-color: whitesmoke;
-    --bg-color: rgb(0, 119, 167);
-    
+    --bg-color: rgb(10, 169, 232);
+    --bg-gradient: linear-gradient(to bottom, rgba(10,169,232,1) 20%, rgba(24,160,213,1) 50%, rgba(10,169,232,1) 80%);
 }
