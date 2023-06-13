@@ -11,15 +11,16 @@ const windSpan = document.querySelector('.wind span');
 const humiditySpan = document.querySelector('.humidity span');
 const rainSpan = document.querySelector('.rain span');
 
-
 const forecastContainer = document.querySelector('.forecast-container');
 const forecastTemp = document.querySelectorAll('.forecast-temp');
 const forecastImg = document.querySelectorAll('.forecast-img');
 const forecastHour = document.querySelectorAll('.forecast-hour');
 
+alert('hi');
+
 forecastContainer.style.display = 'none';
 
-cityName.innerHTML = 'Lalaland';
+cityName.innerHTML = 'Konoha';
 
 locationIcon.addEventListener('click', (event) => {
     inputLocation.style.display = 'flex';
@@ -45,19 +46,21 @@ inputLocation.addEventListener('keypress', (event) => {
     }
 
     inputLocation.style.display = 'none';
-    const city = inputLocation.value;
+    let city = inputLocation.value;
 
     fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json => {
 
     if (json.error) {
         alert(json.error.message);
         imgTimeIcon.src = './assets/not-found-icon.png';
-        spanTimeDescription.innerHTML = 'Fecho o tempo!';
+        spanTimeDescription.innerHTML = 'No time for this';
         divTemperature.innerHTML = '404°';
         data.innerHTML = 'April 15, 1452';
         windSpan.innerHTML = '';
         humiditySpan.innerHTML = '';
         rainSpan.innerHTML = '';
+        cityName.innerHTML = 'Konoha';
+        forecastContainer.style.display = 'none';
         return;
     }
     const timeCondition = json.current.condition.text;
@@ -68,7 +71,6 @@ inputLocation.addEventListener('keypress', (event) => {
     const humidity = json.current.humidity;
     const precip = json.current.precip_mm;
     let cityData = json.location.localtime;
-    console.log(json);
 
     cityData = new Date(cityData).toLocaleDateString("en-US", {
         year: "numeric",
@@ -86,7 +88,6 @@ inputLocation.addEventListener('keypress', (event) => {
     humiditySpan.innerHTML = `${humidity} %`;
 
     inputLocation.value = '';
-    
 })
 
 fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json => {
@@ -94,29 +95,34 @@ fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}}`).the
     const rainChance = json.forecast.forecastday[0].day.daily_chance_of_rain;
     rainSpan.innerHTML = `${rainChance}%`;
 
-    const specificDay = json.forecast.forecastday[0].day;
-    
-    const specificHour = json.forecast.forecastday[0].hour;
     const hour = json.location.localtime;
-    const actualHour = new Date(hour).toLocaleTimeString([],{hour: "2-digit"})
-    let firstHour;
+    let actualHour = new Date(hour).toLocaleTimeString([],{hour: "2-digit"});
 
-    console.log(json);
+    let nextHour = Number(actualHour) + 1;
+    if (actualHour == 23) {
+        nextHour = 0;
+    }
 
-    for (let index = 0; index < specificHour.length; index++) {
-        let specificHourFormated = new Date(specificHour[index].time).toLocaleTimeString([],{hour: "2-digit"});
-        if (specificHourFormated === actualHour) {
-            for(let i=0; i < forecastHour.length; i++) {
-                forecastHour[i].innerHTML = `${specificHourFormated}:00`;
-                forecastTemp[i].innerHTML = `${specificDay.avgtemp_c} °`;
-                forecastImg[i].src = specificDay.condition.icon;
-            }
+    for(let i= 0; i < forecastHour.length; i++) {
+        let hourIndex = nextHour + i;
+        
+        if (hourIndex === 24) {
+            hourIndex = 0;
         }
+        if (hourIndex === 25) {
+            hourIndex = 1;
+        }
+        if (hourIndex === 26) {
+            hourIndex = 2;
+        }
+
+        let specificHour = json.forecast.forecastday[0].hour[hourIndex];
+
+        forecastTemp[i].innerHTML = `${Math.round(specificHour.temp_c)}°C`;
+        forecastImg[i].src = specificHour.condition.icon;
+        forecastHour[i].innerHTML = hourIndex < 10 ? `0${Number(hourIndex)}:00` : `${Number(hourIndex)}:00`;
         }
         forecastContainer.style.display = 'flex';
-})
-})
-
-
-
-
+        console.log(json);
+    })
+});
