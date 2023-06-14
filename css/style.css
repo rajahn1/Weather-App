@@ -88,7 +88,16 @@ main {
 .city {
     font-size: 4rem;
     color: var(--text-color);
+    max-width: 430px;
     margin: 8px 0;
+    text-align: center;
+}
+.city-small {
+    font-size: 2rem;
+    color: var(--text-color);
+    max-width: 430px;
+    margin: 8px 0;
+    text-align: center;
 }
 
 .container-time {

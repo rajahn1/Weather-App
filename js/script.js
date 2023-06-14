@@ -73,7 +73,7 @@ inputLocation.addEventListener('keypress', (event) => {
             windSpan.innerHTML = '';
             humiditySpan.innerHTML = '';
             rainSpan.innerHTML = '';
-            cityName.innerHTML = 'Konoha';
+            cityName.innerHTML = 'Search';
             forecastContainer.style.display = 'none';
             return;
         }
@@ -95,7 +95,12 @@ inputLocation.addEventListener('keypress', (event) => {
       });
       console.log(cityData);
     
+    if (data.location.name.length >= 12) {
+        cityName.classList.remove('city');
+        cityName.classList.add('city-small');
+    }
     cityName.innerHTML = data.location.name;
+    
     imgTimeIcon.src = timeIcon;
     spanTimeDescription.innerHTML = timeCondition;
     divTemperature.innerHTML = `${temperatureCelsius}°C`;
