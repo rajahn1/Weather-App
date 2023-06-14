@@ -33,7 +33,7 @@ const forecastHour = document.querySelectorAll('.forecast-hour');
 
 forecastContainer.style.display = 'none';
 
-cityName.innerHTML = 'Konoha';
+cityName.innerHTML = 'Search';
 
 locationIcon.addEventListener('click', (event) => {
     inputLocation.style.display = 'flex';
