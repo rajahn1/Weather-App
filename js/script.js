@@ -21,7 +21,7 @@ const imgTimeIcon = document.querySelector('.time-img');
 const spanTimeDescription = document.querySelector('.time-condition');
 const locationIcon = document.querySelector('.icon-location');
 const cityName = document.querySelector('.city');
-const data = document.querySelector('.data');
+const localData = document.querySelector('.data');
 const windSpan = document.querySelector('.wind span');
 const humiditySpan = document.querySelector('.humidity span');
 const rainSpan = document.querySelector('.rain span');
@@ -69,7 +69,7 @@ inputLocation.addEventListener('keypress', (event) => {
             imgTimeIcon.src = './assets/not-found-icon.png';
             spanTimeDescription.innerHTML = 'No time for this';
             divTemperature.innerHTML = '404°';
-            data.innerHTML = 'April 15, 1452';
+            localData.innerHTML = 'April 15, 1452';
             windSpan.innerHTML = '';
             humiditySpan.innerHTML = '';
             rainSpan.innerHTML = '';
@@ -93,12 +93,13 @@ inputLocation.addEventListener('keypress', (event) => {
         day: "numeric",
         timeZone: "UTC",
       });
+      console.log(cityData);
     
     cityName.innerHTML = data.location.name;
     imgTimeIcon.src = timeIcon;
     spanTimeDescription.innerHTML = timeCondition;
     divTemperature.innerHTML = `${temperatureCelsius}°C`;
-    data.innerHTML = cityData;
+    localData.innerHTML = cityData;
     windSpan.innerHTML = `${windSpeed} km/h`;
     humiditySpan.innerHTML = `${humidity} %`;
 
