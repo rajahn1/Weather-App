@@ -1,4 +1,19 @@
 const apiKey = '09201f10b59146afa34173458231503';
+const api = axios.create({
+    baseURL: `http://api.weatherapi.com/v1/`,
+    timeout: 10000,
+    headers: {'content-type': 'application/json'}
+  });
+
+function getCity(city) {
+    const response = api.get(`current.json?key=${apiKey}&q=${city}`);
+    return response;
+};
+
+function getForecast(city) {
+    const response = api.get(`forecast.json?key=${apiKey}&q=${city}}`)
+    return response;
+}
 const inputLocation = document.querySelector('input');
 const divTime = document.querySelector('.container-time');
 const divTemperature = document.querySelector('.container-temperature');
@@ -17,8 +32,6 @@ const forecastImg = document.querySelectorAll('.forecast-img');
 const forecastHour = document.querySelectorAll('.forecast-hour');
 
 forecastContainer.style.display = 'none';
-
-alert('hi');
 
 cityName.innerHTML = 'Konoha';
 
@@ -48,29 +61,31 @@ inputLocation.addEventListener('keypress', (event) => {
     inputLocation.style.display = 'none';
     let city = inputLocation.value;
 
-    fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json => {
+    async function searchCity(){
+    try {
+        const { data } = await getCity(city);
+        if (data.error) {
+            alert(data.error.message);
+            imgTimeIcon.src = './assets/not-found-icon.png';
+            spanTimeDescription.innerHTML = 'No time for this';
+            divTemperature.innerHTML = '404°';
+            data.innerHTML = 'April 15, 1452';
+            windSpan.innerHTML = '';
+            humiditySpan.innerHTML = '';
+            rainSpan.innerHTML = '';
+            cityName.innerHTML = 'Konoha';
+            forecastContainer.style.display = 'none';
+            return;
+        }
 
-    if (json.error) {
-        alert(json.error.message);
-        imgTimeIcon.src = './assets/not-found-icon.png';
-        spanTimeDescription.innerHTML = 'No time for this';
-        divTemperature.innerHTML = '404°';
-        data.innerHTML = 'April 15, 1452';
-        windSpan.innerHTML = '';
-        humiditySpan.innerHTML = '';
-        rainSpan.innerHTML = '';
-        cityName.innerHTML = 'Konoha';
-        forecastContainer.style.display = 'none';
-        return;
-    }
-    const timeCondition = json.current.condition.text;
-    const timeIcon = json.current.condition.icon;
-    const temperatureCelsius = parseInt(json.current.temp_c);
-    const temperraturerFahrenheit = json.current.temp_f;
-    const windSpeed = json.current.wind_kph;
-    const humidity = json.current.humidity;
-    const precip = json.current.precip_mm;
-    let cityData = json.location.localtime;
+    const timeCondition = data.current.condition.text;
+    const timeIcon = data.current.condition.icon;
+    const temperatureCelsius = parseInt(data.current.temp_c);
+    const temperraturerFahrenheit = data.current.temp_f;
+    const windSpeed = data.current.wind_kph;
+    const humidity = data.current.humidity;
+    const precip = data.current.precip_mm;
+    let cityData = data.location.localtime;
 
     cityData = new Date(cityData).toLocaleDateString("en-US", {
         year: "numeric",
@@ -79,7 +94,7 @@ inputLocation.addEventListener('keypress', (event) => {
         timeZone: "UTC",
       });
     
-    cityName.innerHTML = json.location.name;
+    cityName.innerHTML = data.location.name;
     imgTimeIcon.src = timeIcon;
     spanTimeDescription.innerHTML = timeCondition;
     divTemperature.innerHTML = `${temperatureCelsius}°C`;
@@ -88,14 +103,19 @@ inputLocation.addEventListener('keypress', (event) => {
     humiditySpan.innerHTML = `${humidity} %`;
 
     inputLocation.value = '';
-})
+    } catch (error) {
+        console.log(error)
+    }
+}
+searchCity();
 
-fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}}`).then(response => response.json()).then(json => {
-
-    const rainChance = json.forecast.forecastday[0].day.daily_chance_of_rain;
+    async function searchForecast() {
+        try {
+            const {data} = await getForecast(city);
+            const rainChance = data.forecast.forecastday[0].day.daily_chance_of_rain;
     rainSpan.innerHTML = `${rainChance}%`;
 
-    const hour = json.location.localtime;
+    const hour = data.location.localtime;
     let actualHour = new Date(hour).toLocaleTimeString([],{hour: "2-digit"});
 
     let nextHour = Number(actualHour) + 1;
@@ -116,13 +136,16 @@ fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}}`).the
             hourIndex = 2;
         }
 
-        let specificHour = json.forecast.forecastday[0].hour[hourIndex];
+        let specificHour = data.forecast.forecastday[0].hour[hourIndex];
 
         forecastTemp[i].innerHTML = `${Math.round(specificHour.temp_c)}°C`;
         forecastImg[i].src = specificHour.condition.icon;
         forecastHour[i].innerHTML = hourIndex < 10 ? `0${Number(hourIndex)}:00` : `${Number(hourIndex)}:00`;
         }
         forecastContainer.style.display = 'flex';
-        console.log(json);
-    })
-});
+    } catch (error) {
+        console.log(error)
+        }
+    }
+    searchForecast();
+})
