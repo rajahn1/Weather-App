@@ -1,6 +1,6 @@
 const apiKey = '09201f10b59146afa34173458231503';
 const api = axios.create({
-    baseURL: `http://api.weatherapi.com/v1/`,
+    baseURL: `https://api.weatherapi.com/v1/`,
     timeout: 10000,
     headers: {'content-type': 'application/json'}
   });
