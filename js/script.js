@@ -30,6 +30,8 @@ const forecastContainer = document.querySelector('.forecast-container');
 const forecastTemp = document.querySelectorAll('.forecast-temp');
 const forecastImg = document.querySelectorAll('.forecast-img');
 const forecastHour = document.querySelectorAll('.forecast-hour');
+const icon = document.querySelector('i');
+
 
 forecastContainer.style.display = 'none';
 
@@ -38,6 +40,7 @@ cityName.innerHTML = 'Search';
 locationIcon.addEventListener('click', (event) => {
     inputLocation.style.display = 'flex';
     inputLocation.value = '';
+    icon.style.display = 'none'
 })
 
 inputLocation.addEventListener('blur', (event) => {
